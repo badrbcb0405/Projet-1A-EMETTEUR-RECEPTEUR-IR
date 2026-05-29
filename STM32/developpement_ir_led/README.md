@@ -1,23 +1,17 @@
 # Telecommande IR + recepteur LED WS2812B sur STM32
 
-Ce dossier contient un code STM32Cube HAL portable pour faire fonctionner :
 
 - un emetteur IR NEC 38 kHz ;
 - un recepteur IR NEC ;
 - une commande de LED RGB adressables WS2812B par une broche DATA.
 
-Les LED du shield recepteur sont des WS2812B : elles recoivent une trame numerique sur
-`DIN`, puis se chainent par `DOUT`.
-
-Le code est volontairement separe de CubeMX : tu peux le copier dans deux projets
-STM32CubeIDE, un projet `emetteur` et un projet `recepteur`.
 
 ## Hypotheses materielles
 
 ### Emetteur
 
 - STM32 avec HAL.
-- LED IR pilotee par une sortie PWM a 38 kHz, idealement via transistor.
+- LED IR pilotee par une sortie PWM a 38 kHz.
 - 4 boutons : `BUTTON1`, `BUTTON2`, `BUTTON3`, `BUTTON4`.
 - Fonctions associees : marche/arret, luminosite +, luminosite -, mode.
 - Boutons cables entre l'entree GPIO et GND, avec pull-up interne activee.
@@ -44,7 +38,6 @@ STM32CubeIDE, un projet `emetteur` et un projet `recepteur`.
    - `common/ir_nec.c`
    - `emitter/app_ir_remote.h`
    - `emitter/app_ir_remote.c`
-6. Copier le contenu utile de `emitter/main_emitter_example.c` dans ton `Core/Src/main.c`.
 
 ### Recepteur
 
@@ -71,12 +64,9 @@ Adresse NEC : `0x10EF`
 | MINUS | `0x47` |
 | MODE | `0x44` |
 
-Tu peux modifier ces valeurs dans `common/ir_nec.h`.
+
 
 ## Notes importantes
 
 - Le protocole NEC transmet les octets LSB first. Le code gere l'encodage et le decodage.
 - La plupart des modules IR demodules sortent un signal actif a l'etat bas pendant les impulsions IR.
-- Sur le recepteur, le timer microsecondes doit tourner en continu.
-- Les WS2812B utilisent l'ordre couleur GRB et une trame precise d'environ 800 kHz.
-- Sur l'emetteur et le recepteur WS2812B, la precision des delais repose sur le compteur DWT du Cortex-M. Il fonctionne sur le STM32L476RG.
